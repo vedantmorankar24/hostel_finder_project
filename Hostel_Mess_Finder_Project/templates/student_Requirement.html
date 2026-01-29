@@ -1,51 +1,128 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Requirements | StudentNest</title>
-
-    <!-- Tailwind -->
+    <title>Dashboard | StudentNest</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-
-    <!-- Your original CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body class="antialiased bg-[#0d0d0f] text-white font-sans min-h-screen">
-
-    <!-- Header -->
-    <header class="text-center py-10">
-        <h2 class="text-3xl font-extrabold mb-2">Student Requirements</h2>
-        <p class="text-gray-400 text-sm">Choose what you want to explore</p>
-    </header>
-
-    <!-- Requirement Boxes -->
-    <section class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
         
-        <!-- Rooms Box -->
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .requirement-card {
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated border effect */
+        .requirement-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 2.5rem;
+            padding: 2px; 
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            transition: 0.5s;
+        }
+
+        .requirement-card:hover::before {
+            background: var(--accent-color);
+        }
+
+        .requirement-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-icon { animation: float 4s ease-in-out infinite; }
+
+        .glow-sphere {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body class="bg-[#0d0d0f] text-gray-200 min-h-screen flex flex-col items-center justify-center p-6">
+
+    <div class="glow-sphere bg-indigo-600 top-[-10%] left-[-10%] animate-pulse"></div>
+    <div class="glow-sphere bg-emerald-600 bottom-[-10%] right-[-10%] animate-pulse" style="animation-delay: 2s;"></div>
+
+    <div class="mb-12 text-center">
+        <div class="inline-flex items-center gap-2 mb-4">
+            <div class="w-10 h-10 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center">
+                <div class="w-4 h-4 bg-indigo-500 rounded-sm rotate-45"></div>
+            </div>
+            <h1 class="text-2xl font-black tracking-tighter text-white uppercase italic">Student<span class="text-indigo-500">Nest</span></h1>
+        </div>
+        <h2 class="text-4xl font-extrabold text-white tracking-tight">How can we help today?</h2>
+        <p class="text-gray-500 mt-2 font-medium">Select a category to begin your exploration.</p>
+    </div>
+
+    <section class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+        
         <a href="{{ url_for('student_rooms_page') }}" 
-           class="glass p-10 rounded-[2.5rem] border border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-teal-400 transition shadow-xl">
-            <div class="text-5xl mb-4">🏠</div>
-            <h3 class="text-xl font-bold mb-2">Rooms</h3>
-            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Find hostels & partners</p>
+           class="requirement-card glass group p-12 rounded-[3rem] text-center border border-white/5"
+           style="--accent-color: #6366f1;">
+            
+            <div class="relative inline-block mb-8">
+                <div class="absolute inset-0 bg-indigo-500 blur-3xl opacity-0 group-hover:opacity-40 transition-opacity"></div>
+                <div class="text-7xl float-icon relative">🏠</div>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">Find a Home</h3>
+            <p class="text-sm text-gray-400 leading-relaxed max-w-[200px] mx-auto mb-6">Explore premium hostels, PGs, and shared living spaces.</p>
+            
+            <div class="inline-flex items-center text-xs font-black uppercase tracking-[0.2em] text-indigo-500 group-hover:translate-x-2 transition-transform">
+                Explore Rooms <span class="ml-2">→</span>
+            </div>
         </a>
 
-        <!-- Mess Box -->
         <a href="{{ url_for('student_mess_page') }}" 
-           class="glass p-10 rounded-[2.5rem] border border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-400 transition shadow-xl">
-            <div class="text-5xl mb-4">🍱</div>
-            <h3 class="text-xl font-bold mb-2">Mess</h3>
-            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">View menus & subscriptions</p>
+           class="requirement-card glass group p-12 rounded-[3rem] text-center border border-white/5"
+           style="--accent-color: #10b981;">
+            
+            <div class="relative inline-block mb-8">
+                <div class="absolute inset-0 bg-emerald-500 blur-3xl opacity-0 group-hover:opacity-40 transition-opacity"></div>
+                <div class="text-7xl float-icon relative" style="animation-delay: 1s;">🍱</div>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Student Mess</h3>
+            <p class="text-sm text-gray-400 leading-relaxed max-w-[200px] mx-auto mb-6">Discover healthy meal plans and daily special menus.</p>
+            
+            <div class="inline-flex items-center text-xs font-black uppercase tracking-[0.2em] text-emerald-500 group-hover:translate-x-2 transition-transform">
+                Browse Menus <span class="ml-2">→</span>
+            </div>
         </a>
 
     </section>
 
-    <!-- Logout -->
-    <div class="text-center mt-10">
-        <a href="{{ url_for('logout_page') }}" 
-           class="text-red-500 font-bold hover:underline">Logout</a>
+    <div class="mt-16 flex flex-col items-center gap-4">
+        <a href="{{ url_for('logout_page') }}" class="group flex items-center gap-2 text-gray-500 hover:text-red-400 transition-colors text-xs font-bold uppercase tracking-widest">
+            <span class="p-2 rounded-lg bg-white/5 border border-white/5 group-hover:border-red-500/30">🚪</span>
+            Log out session
+        </a>
     </div>
 
 </body>

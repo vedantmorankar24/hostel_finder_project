@@ -2,81 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mess Registration | StudentNest</title>
-
-    <!-- Tailwind -->
+    <title>Mess Partnership | StudentNest</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0d0d0f; }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+        /* Azure Ambient Glow */
+        .bg-blue-glow {
+            background: radial-gradient(circle at 70% 70%, #1e3a8a 0%, #0d0d0f 100%);
+        }
 
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        /* Input animations */
+        .input-focus:focus {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.05);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.15);
+        }
+
+        /* Blue Button Shimmer */
+        .btn-blue {
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .btn-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+        .btn-blue::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.6s;
+        }
+        .btn-blue:hover::after { left: 100%; }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-up { animation: slideUp 0.6s ease-out forwards; }
+    </style>
 </head>
 
-<body class="antialiased bg-[#0d0d0f] text-white font-sans">
+<body class="min-h-screen flex items-center justify-center p-6 bg-blue-glow relative overflow-hidden">
 
-<div class="min-h-screen flex items-center justify-center px-6">
+    <div class="fixed top-[-10%] right-[-10%] w-[400px] h-[400px] bg-blue-500/10 blur-[100px] rounded-full -z-10"></div>
 
-    <div class="glass p-10 rounded-[3rem] w-full max-w-md border border-white/10 shadow-xl">
+    <div class="glass p-10 md:p-14 rounded-[3.5rem] w-full max-w-lg animate-up relative">
+        
+        <div class="flex justify-center mb-8">
+            <div class="w-16 h-16 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-3xl">🍛</span>
+            </div>
+        </div>
 
-        <h2 class="text-3xl font-extrabold mb-2 text-center">
-            Mess Registration
-        </h2>
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black text-white tracking-tight uppercase">Mess <span class="text-blue-400">Partner</span></h2>
+            <p class="text-[11px] text-gray-500 mt-2 font-bold uppercase tracking-[0.2em]">Digitize your kitchen & reach more students</p>
+        </div>
 
-        <p class="text-sm text-gray-500 mb-8 text-center italic">
-            List your mess & manage menu
-        </p>
-
-        <form method="POST" action="{{ url_for('mess_register_page') }}" class="space-y-4">
-
-            <div>
-                <label class="text-[10px] text-gray-500 font-black uppercase mb-2 block tracking-widest">
-                    Mess Name
-                </label>
-                <input type="text" name="name" required
-                    class="w-full bg-white/5 p-4 rounded-xl border border-white/10 outline-none focus:border-blue-400 transition">
+        <form method="POST" action="{{ url_for('mess_register_page') }}" class="space-y-5">
+            
+            <div class="space-y-1">
+                <label class="text-[9px] text-gray-500 font-black uppercase tracking-widest ml-1">Establishment Name</label>
+                <input type="text" name="name" required placeholder="e.g. Royal Tiffin Service"
+                    class="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-white outline-none input-focus transition-all placeholder:text-gray-700">
             </div>
 
-            <div>
-                <label class="text-[10px] text-gray-500 font-black uppercase mb-2 block tracking-widest">
-                    Email Address
-                </label>
-                <input type="email" name="email" required
-                    class="w-full bg-white/5 p-4 rounded-xl border border-white/10 outline-none focus:border-blue-400 transition">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="text-[9px] text-gray-500 font-black uppercase tracking-widest ml-1">Business Email</label>
+                    <input type="email" name="email" required placeholder="mess@nest.com"
+                        class="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-white outline-none input-focus transition-all placeholder:text-gray-700">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] text-gray-500 font-black uppercase tracking-widest ml-1">Manager Contact</label>
+                    <input type="tel" name="phone" required placeholder="+91..."
+                        class="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-white outline-none input-focus transition-all placeholder:text-gray-700">
+                </div>
             </div>
 
-            <div>
-                <label class="text-[10px] text-gray-500 font-black uppercase mb-2 block tracking-widest">
-                    Phone Number
-                </label>
-                <input type="tel" name="phone" required
-                    class="w-full bg-white/5 p-4 rounded-xl border border-white/10 outline-none focus:border-blue-400 transition">
+            <div class="space-y-1">
+                <label class="text-[9px] text-gray-500 font-black uppercase tracking-widest ml-1">Control Room Password</label>
+                <input type="password" name="password" required minlength="6" placeholder="••••••••"
+                    class="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-white outline-none input-focus transition-all placeholder:text-gray-700">
             </div>
 
-            <div>
-                <label class="text-[10px] text-gray-500 font-black uppercase mb-2 block tracking-widest">
-                    Password
-                </label>
-                <input type="password" name="password" required minlength="6"
-                    class="w-full bg-white/5 p-4 rounded-xl border border-white/10 outline-none focus:border-blue-400 transition">
-            </div>
-
-            <button
-                class="w-full py-4 mt-4 rounded-xl font-black uppercase tracking-widest text-sm text-white mess-gradient shadow-xl">
-                Register
+            <button type="submit"
+                class="w-full py-5 mt-4 rounded-2xl font-black uppercase tracking-[0.2em] text-xs text-white btn-blue active:scale-95">
+                Join Culinary Network
             </button>
         </form>
 
-        <p class="text-[10px] text-gray-500 text-center mt-6">
-            Already registered?
-            <a href="{{ url_for('mess_login_page') }}" class="text-blue-400 font-bold hover:underline">
-                Login
-            </a>
-        </p>
-
+        <div class="mt-10 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] text-gray-600 uppercase font-black tracking-widest">
+                Already serving students? 
+                <a href="{{ url_for('mess_login_page') }}" class="text-blue-400 hover:text-white transition-colors ml-1 underline underline-offset-4 decoration-blue-500/30">Login Partner</a>
+            </p>
+        </div>
     </div>
-</div>
 
 </body>
 </html>

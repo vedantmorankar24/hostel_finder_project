@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ mess.name }} | StudentNest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .gradient-border { border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .menu-card:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #064e3b; border-radius: 10px; }
+    </style>
+</head>
+
+<body class="bg-[#0d0d0f] text-gray-200 min-h-screen selection:bg-emerald-500/30">
+
+    <div class="fixed top-0 right-0 w-[500px] h-[500px] bg-emerald-600/5 rounded-full blur-[120px] -z-10"></div>
+    <div class="fixed bottom-0 left-0 w-[500px] h-[500px] bg-teal-600/5 rounded-full blur-[120px] -z-10"></div>
+
+    <div class="max-w-6xl mx-auto p-6 lg:p-12">
+        <nav class="flex justify-between items-center mb-12">
+            <a href="{{ url_for('student_mess_page') }}" class="text-gray-500 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest flex items-center">
+                <span class="mr-2">←</span> Back to Search
+            </a>
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-emerald-500 rounded shadow-lg shadow-emerald-500/20"></div>
+                <span class="font-bold text-white uppercase text-sm tracking-tighter">StudentNest</span>
+            </div>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            
+            <div class="lg:col-span-2 space-y-8">
+                
+                <div class="glass rounded-[2.5rem] overflow-hidden gradient-border h-[400px] relative">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200" class="w-full h-full object-cover">
+                    <div class="absolute bottom-8 left-8">
+                        <span class="bg-emerald-500 text-black px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest mb-3 inline-block">
+                            {{ mess.veg_type }}
+                        </span>
+                        <h1 class="text-5xl font-bold text-white drop-shadow-2xl">{{ mess.name }}</h1>
+                    </div>
+                </div>
+
+                <div class="glass p-10 rounded-[2.5rem] gradient-border">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-2xl font-bold text-white">Today's Menu</h3>
+                        <span class="text-emerald-400 text-xs font-bold uppercase tracking-widest">Freshly Prepared</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="glass p-6 rounded-3xl border border-white/5 menu-card transition-all">
+                            <span class="text-2xl mb-3 block">🍳</span>
+                            <h4 class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Breakfast</h4>
+                            <p class="text-white font-medium">{{ mess.breakfast or 'Standard Breakfast' }}</p>
+                        </div>
+
+                        <div class="glass p-6 rounded-3xl border border-white/5 menu-card transition-all">
+                            <span class="text-2xl mb-3 block">🍛</span>
+                            <h4 class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Lunch</h4>
+                            <p class="text-white font-medium">{{ mess.lunch or 'Regular Thali' }}</p>
+                        </div>
+
+                        <div class="glass p-6 rounded-3xl border border-white/5 menu-card transition-all">
+                            <span class="text-2xl mb-3 block">🍲</span>
+                            <h4 class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Dinner</h4>
+                            <p class="text-white font-medium">{{ mess.dinner or 'Light Dinner' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass p-10 rounded-[2.5rem] gradient-border">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Location Details</h3>
+                    <p class="text-white text-lg mb-6">📍 {{ mess.address }}, {{ mess.city }}</p>
+                    <hr class="border-white/5 mb-6">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Contact Information</h3>
+                    <div class="flex gap-10">
+                        <div>
+                            <p class="text-[10px] text-gray-500 uppercase mb-1">Owner Email</p>
+                            <p class="text-white font-medium">{{ mess.email }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-500 uppercase mb-1">Phone Number</p>
+                            <p class="text-white font-medium">{{ mess.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="glass p-8 rounded-[2.5rem] gradient-border sticky top-10">
+                    <div class="mb-8">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Monthly Subscription</p>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-4xl font-bold text-white">₹{{ mess.price }}</span>
+                            <span class="text-gray-500">/ month</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between items-center py-3 border-b border-white/5">
+                            <span class="text-gray-400 text-sm">Available Seats</span>
+                            <span class="text-emerald-400 font-bold">{{ mess.available_seats }}</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-white/5">
+                            <span class="text-gray-400 text-sm">Meal Type</span>
+                            <span class="text-white font-bold">{{ mess.veg_type }}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <a href="tel:{{ mess.phone }}" class="block w-full bg-emerald-500 hover:bg-emerald-400 text-black text-center font-extrabold py-4 rounded-2xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95">
+                            BOOK SUBSCRIPTION
+                        </a>
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ mess.address|urlencode }}+{{ mess.city|urlencode }}" target="_blank" class="block w-full bg-white/5 hover:bg-white/10 text-white text-center font-bold py-4 rounded-2xl border border-white/10 transition-all">
+                            VIEW ON MAPS
+                        </a>
+                    </div>
+
+                    <p class="text-center text-[10px] text-gray-500 mt-6 uppercase tracking-widest">
+                        Verified Mess Partner
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

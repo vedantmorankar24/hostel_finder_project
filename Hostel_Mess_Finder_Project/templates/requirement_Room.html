@@ -1,106 +1,109 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Rooms | StudentNest</title>
-
-    <!-- Tailwind -->
+    <title>Search Rooms | StudentNest</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .gradient-border { border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .gradient-border:hover { border-color: #6366f1; box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #312e81; border-radius: 10px; }
+    </style>
 </head>
 
-<body class="bg-[#0d0d0f] text-white font-sans min-h-screen">
+<body class="bg-[#0d0d0f] text-gray-200 min-h-screen selection:bg-indigo-500/30">
+    <div class="fixed top-0 left-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px] -z-10"></div>
+    <div class="fixed bottom-0 right-0 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] -z-10"></div>
 
-    <!-- Header -->
-    <header class="text-center py-10">
-        <h2 class="text-3xl font-extrabold mb-2">Search Rooms</h2>
-        <p class="text-gray-400 text-sm">Enter city or location to find hostels</p>
-    </header>
-
-    <!-- Search Bar -->
-    <div class="max-w-2xl mx-auto px-6 mb-10">
-        <form method="GET" action="{{ url_for('student_rooms_page') }}" class="flex gap-2">
-            <input type="text" name="city" placeholder="Enter city..."
-                class="flex-1 p-4 rounded-xl bg-white/5 border border-white/10 outline-none focus:border-teal-400 text-white"
-                required>
-            <button type="submit"
-                class="px-6 py-4 bg-teal-500 rounded-xl font-bold text-black shadow-md hover:bg-teal-400 transition">
-                Search
-            </button>
-        </form>
-    </div>
-
-    <!-- Room Results -->
-    <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        {% if houses %}
-        {% for house in houses %}
-        <div class="glass rounded-[2.5rem] overflow-hidden border border-white/10 shadow-xl">
-
-            {% if house.images and house.images|length > 0 %}
-            <img src="{{ url_for('static', filename='uploads/' ~ house.images[0].filename) }}?v={{ house.id }}"
-                class="h-48 w-full object-cover">
-            {% else %}
-            <img src="https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?auto=format&fit=crop&w=800&q=80"
-                class="h-48 w-full object-cover">
-            {% endif %}
-
-            <div class="p-6">
-                <h3 class="font-bold text-lg mb-2">
-                    {{ house.house_name }}
-                </h3>
-
-                <p class="text-xs text-gray-400 mb-2">
-                    Owner ID: {{ house.owner_id }} |
-                    Seats: {{ house.seats }}
-                </p>
-
-                <p class="text-xs text-gray-400 italic mb-2">
-                    Location: {{ house.location }}
-                </p>
-
-                <p class="text-xs text-gray-400 italic mb-2">
-                    City: {{ house.city }}
-                </p>
-
-                <p class="text-sm text-gray-300 mb-3">
-                    Rent: ₹{{ house.rent }}
-                </p>
-
-                <p class="text-sm text-gray-300 mb-3">
-                    Features: {{ house.features }}
-                </p>
-
-                <a href="https://www.google.com/maps?q={{ house.location | urlencode }},{{ house.city | urlencode }}"
-                    target="_blank"
-                    class="block py-2 text-center bg-blue-500 rounded-xl text-black font-bold hover:bg-blue-400 transition">
-                    View on Map
-                </a>
+    <div class="flex min-h-screen">
+        <aside class="w-1/3 glass p-10 border-r border-white/5 sticky top-0 h-screen overflow-y-auto">
+            <div class="flex items-center gap-2 mb-8">
+                <div class="w-8 h-8 bg-indigo-500 rounded-lg"></div>
+                <h1 class="text-xl font-bold tracking-tight text-white uppercase">Student<span class="text-indigo-500">Nest</span></h1>
             </div>
-        </div>
-        {% endfor %}
-        {% else %}
-        <p class="text-center text-gray-400 col-span-3">
-            No rooms found for this location 😕
-        </p>
-        {% endif %}
 
-    </section>
+            <h2 class="text-3xl font-bold mb-2 text-white">Find a Room</h2>
+            <p class="text-gray-400 text-sm mb-8">Browse verified student hostels and mess facilities in your city.</p>
 
+            <form method="GET" action="{{ url_for('student_rooms_page') }}" class="space-y-5">
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 uppercase ml-1">Location / City</label>
+                    <div class="relative mt-2">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-sm">🔍</span>
+                        <input type="text" name="city" placeholder="e.g. Pune, Mumbai..." class="w-full pl-10 p-3 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500 outline-none transition-all text-white">
+                    </div>
+                </div>
 
-    <!-- Logout / Back -->
-    <div class="text-center mt-10">
-        <a href="{{ url_for('student_requirements_page') }}" class="text-teal-400 font-bold hover:underline mr-6">←
-            Back</a>
-        <a href="{{ url_for('logout_page') }}" class="text-red-500 font-bold hover:underline">Logout</a>
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-indigo-500 blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <button type="submit" class="relative w-full bg-indigo-500 hover:bg-indigo-400 text-black font-extrabold py-4 rounded-xl transition-all active:scale-95 uppercase tracking-wider">
+                        Search Hostels
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-10 pt-10 border-t border-white/5">
+                <a href="{{ url_for('student_requirements_page') }}" class="block text-gray-500 hover:text-indigo-400 text-xs font-bold uppercase tracking-widest mb-4 transition-colors">← Back to Portal</a>
+                <a href="/logout" class="block text-gray-500 hover:text-red-400 text-xs font-bold uppercase tracking-widest transition-colors">Log out session</a>
+            </div>
+        </aside>
+
+        <main class="w-2/3 p-12 overflow-y-auto">
+            <header class="flex justify-between items-end mb-10">
+                <div>
+                    <h2 class="text-4xl font-bold text-white">Available Stays</h2>
+                    <p class="text-gray-400 mt-2">Found <span class="text-indigo-400 font-bold">{% if houses %}{{ houses|length }}{% else %}0{% endif %}</span> properties near you</p>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-2 gap-8">
+                {% if houses %}
+                    {% for house in houses %}
+                    <div class="glass rounded-3xl gradient-border relative group overflow-hidden flex flex-col">
+                        <div class="h-48 overflow-hidden relative">
+                            {% if house.images %}
+                                <img src="{{ url_for('static', filename='uploads/' ~ house.images[0].filename) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1555854816-802f188095e4?auto=format&fit=crop&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            {% endif %}
+                            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-indigo-400 text-[10px] font-bold px-3 py-1 rounded-full border border-white/10">
+                                POPULAR
+                            </div>
+                        </div>
+
+                        <div class="p-8 flex-1 flex flex-col">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">{{ house.house_name }}</h3>
+                            <p class="text-xs text-indigo-300 mt-2 font-medium">📍 {{ house.location }}, {{ house.city }}</p>
+                            
+                            <div class="mt-6 flex items-center justify-between border-t border-white/5 pt-6">
+                                <div>
+                                    <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Monthly Rent</p>
+                                    <p class="text-xl font-bold text-white">₹{{ house.rent }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Status</p>
+                                    <p class="text-sm font-bold text-green-400">{{ house.seats }} Seats Left</p>
+                                </div>
+                            </div>
+
+                            <a href="{{ url_for('house_details_page', house_id=house.id) }}" class="mt-6 w-full py-3 bg-white/5 hover:bg-indigo-500 hover:text-black border border-white/10 rounded-xl text-center font-bold transition-all text-sm">
+                                VIEW DETAILS
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-span-2 py-20 text-center glass rounded-3xl border border-dashed border-white/10">
+                        <p class="text-gray-500 italic">No listings found. Try searching for a different city.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
     </div>
-
 </body>
-
 </html>

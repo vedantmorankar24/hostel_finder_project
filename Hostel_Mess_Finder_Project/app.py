@@ -191,10 +191,14 @@ def owner_dashboard():
 
         # Save uploaded images
         files = request.files.getlist("images")
+        
+        print(request.files)
         for file in files:
             if file.filename != "":
                 filename = secure_filename(file.filename)
+                print(filename)
                 filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                print(filepath)
                 file.save(filepath)
 
                 house_image = HouseImage(
@@ -239,6 +243,31 @@ def add_room():
     db.session.commit()
     return "Room added successfully"
 
+@app.route('/house/<int:house_id>')
+def house_details_page(house_id):
+    house = House.query.get(house_id)
+    if not house:
+        return "House not found", 404
+    return render_template('house_details.html', house=house)
+
+@app.route('/edit_house/<int:house_id>', methods=['POST'])
+def edit_house(house_id):
+    house = House.query.get_or_404(house_id)
+    house.house_name = request.form.get('house_name')
+    house.rent = request.form.get('rent')
+    house.seats = request.form.get('seats')
+    # Add logic for saving images if request.files['images'] is present
+    db.session.commit()
+    return redirect(url_for('owner_dashboard'))
+
+@app.route('/house/delete/<int:house_id>', methods=['POST'])
+def delete_house(house_id):
+    house = House.query.get(house_id)
+    if not house:
+        return "House not found", 404
+    db.session.delete(house)
+    db.session.commit()
+    return "House deleted successfully!"
 # =========================
 # STUDENT VIEW AVAILABLE ROOMS
 # =========================
@@ -332,6 +361,14 @@ def add_mess():
         return redirect(url_for("add_mess"))
 
     return render_template("mess_dashboard.html")
+
+@app.route('/mess/<int:mess_id>')
+def mess_details_page(mess_id):
+    # Fetch the specific mess by ID
+    mess = Mess.query.get_or_404(mess_id)
+    
+    # We pass 'mess' to the template so the HTML can use {{ mess.name }}, etc.
+    return render_template('mess_details.html', mess=mess)
 
 # Logout
 @app.route("/logout")
