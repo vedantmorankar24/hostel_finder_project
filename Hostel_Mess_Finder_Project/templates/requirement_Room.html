@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Rooms | StudentNest</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="bg-[#0d0d0f] text-white font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="text-center py-10">
+        <h2 class="text-3xl font-extrabold mb-2">Search Rooms</h2>
+        <p class="text-gray-400 text-sm">Enter city or location to find hostels</p>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="max-w-2xl mx-auto px-6 mb-10">
+        <form method="GET" action="{{ url_for('student_rooms_page') }}" class="flex gap-2">
+            <input type="text" name="city" placeholder="Enter city..."
+                class="flex-1 p-4 rounded-xl bg-white/5 border border-white/10 outline-none focus:border-teal-400 text-white"
+                required>
+            <button type="submit"
+                class="px-6 py-4 bg-teal-500 rounded-xl font-bold text-black shadow-md hover:bg-teal-400 transition">
+                Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Room Results -->
+    <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        {% if houses %}
+        {% for house in houses %}
+        <div class="glass rounded-[2.5rem] overflow-hidden border border-white/10 shadow-xl">
+
+            {% if house.images and house.images|length > 0 %}
+            <img src="{{ url_for('static', filename='uploads/' ~ house.images[0].filename) }}?v={{ house.id }}"
+                class="h-48 w-full object-cover">
+            {% else %}
+            <img src="https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?auto=format&fit=crop&w=800&q=80"
+                class="h-48 w-full object-cover">
+            {% endif %}
+
+            <div class="p-6">
+                <h3 class="font-bold text-lg mb-2">
+                    {{ house.house_name }}
+                </h3>
+
+                <p class="text-xs text-gray-400 mb-2">
+                    Owner ID: {{ house.owner_id }} |
+                    Seats: {{ house.seats }}
+                </p>
+
+                <p class="text-xs text-gray-400 italic mb-2">
+                    Location: {{ house.location }}
+                </p>
+
+                <p class="text-xs text-gray-400 italic mb-2">
+                    City: {{ house.city }}
+                </p>
+
+                <p class="text-sm text-gray-300 mb-3">
+                    Rent: ₹{{ house.rent }}
+                </p>
+
+                <p class="text-sm text-gray-300 mb-3">
+                    Features: {{ house.features }}
+                </p>
+
+                <a href="https://www.google.com/maps?q={{ house.location | urlencode }},{{ house.city | urlencode }}"
+                    target="_blank"
+                    class="block py-2 text-center bg-blue-500 rounded-xl text-black font-bold hover:bg-blue-400 transition">
+                    View on Map
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-center text-gray-400 col-span-3">
+            No rooms found for this location 😕
+        </p>
+        {% endif %}
+
+    </section>
+
+
+    <!-- Logout / Back -->
+    <div class="text-center mt-10">
+        <a href="{{ url_for('student_requirements_page') }}" class="text-teal-400 font-bold hover:underline mr-6">←
+            Back</a>
+        <a href="{{ url_for('logout_page') }}" class="text-red-500 font-bold hover:underline">Logout</a>
+    </div>
+
+</body>
+
+</html>

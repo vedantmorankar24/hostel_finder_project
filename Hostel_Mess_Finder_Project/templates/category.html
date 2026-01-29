@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDENTNEST | Secure Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+</head>
+
+<body class="antialiased">
+
+    <div id="gatekeeper"
+        class="fixed inset-0 z-[200] bg-[#0d0d0f] flex items-center justify-center p-6 overflow-y-auto">
+        <div id="selection-screen" class="max-w-4xl w-full text-center">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter">Student<span
+                    class="text-teal-400">Nest.</span></h1>
+            <p class="text-gray-500 mb-12 uppercase tracking-[0.3em] text-xs font-bold">Identity Verification Required
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="/student/login"
+                    class="glass p-8 rounded-[2.5rem] cursor-pointer hover:border-teal-400 transition group block">
+                    <div class="text-3xl mb-4">🎓</div>
+                    <h3 class="text-xl font-bold mb-2">Student</h3>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+                        Find Rooms & Partners
+                    </p>
+                </a>
+
+                <a href="/owner/login"
+                    class="glass p-8 rounded-[2.5rem] cursor-pointer hover:border-indigo-400 transition group">
+                    <div class="text-3xl mb-4">🏠</div>
+                    <h3 class="text-xl font-bold mb-2">Owner</h3>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+                        Manage Hostels
+                    </p>
+                </a>
+
+                <a href="{{ url_for('mess_login_page') }}"
+                    class="glass p-8 rounded-[2.5rem] cursor-pointer hover:border-blue-400 transition group text-center">
+                    <div class="text-3xl mb-4">🍛</div>
+                    <h3 class="text-xl font-bold mb-2">Mess</h3>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+                        Add Mess & Manage Menu
+                    </p>
+                </a>
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

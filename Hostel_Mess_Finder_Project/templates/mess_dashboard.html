@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mess Dashboard | StudentNest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="bg-[#0d0d0f] text-white min-h-screen font-sans">
+
+    <div class="flex min-h-screen">
+
+        <!-- LEFT SIDE : ADD MESS -->
+        <div class="w-1/3 bg-black p-8 border-r border-white/10">
+            <h2 class="text-2xl font-bold mb-6 text-blue-400">Add Mess</h2>
+
+            <form method="POST" action="{{ url_for('add_mess') }}" class="space-y-4">
+
+                <input type="text" name="name" placeholder="Mess Name"
+                    class="w-full p-3 rounded bg-white/5 border border-white/10" required>
+
+                <input type="email" name="email" placeholder="Email"
+                    class="w-full p-3 rounded bg-white/5 border border-white/10" required>
+
+                <input type="tel" name="phone" placeholder="Contact Number"
+                    class="w-full p-3 rounded bg-white/5 border border-white/10" required>
+
+                <input type="text" name="address" placeholder="Address"
+                    class="w-full p-3 rounded bg-white/5 border border-white/10" required>
+
+                <input type="text" name="city" placeholder="City"
+                    class="w-full p-3 rounded bg-white/5 border border-white/10" required>
+
+                <input type="number" name="price" placeholder="Monthly Price"
+                    class="w-full p-3 rounded bg-white/5 border border-white/10" required>
+
+                <select name="veg_type" class="w-full p-3 rounded bg-white/5 border border-white/10">
+                    <option value="Veg">Veg</option>
+                    <option value="Non-Veg">Non-Veg</option>
+                </select>
+
+                <input type="number" name="available_seats" placeholder="Available Seats"
+                    class="w-full p-3 rounded bg-white/5 border border-white/10" required>
+
+                <button type="submit" class="w-full bg-blue-500 py-3 rounded text-black font-bold">
+                    Add Mess
+                </button>
+            </form>
+
+
+            <a href="{{ url_for('logout_page') }}" class="block mt-6 text-red-400 text-sm">Logout</a>
+        </div>
+
+        <!-- RIGHT SIDE : SPECIAL DAYS -->
+        <div class="w-2/3 p-8">
+            <h2 class="text-2xl font-bold mb-6 text-blue-400">Special Days Menu</h2>
+
+            <form method="POST" class="space-y-6">
+
+                <!-- Day Selection -->
+                <div>
+                    <label class="text-sm mb-2 block text-gray-400">Select Day</label>
+                    <input type="date" name="menu_date" class="w-full p-3 rounded bg-white/5 border border-white/10">
+                </div>
+
+                <!-- Breakfast -->
+                <div>
+                    <label class="text-sm mb-2 block text-gray-400">Breakfast</label>
+                    <textarea name="breakfast" rows="2" class="w-full p-3 rounded bg-white/5 border border-white/10"
+                        placeholder="E.g., Poha, Idli, Bread"></textarea>
+                </div>
+
+                <!-- Lunch -->
+                <div>
+                    <label class="text-sm mb-2 block text-gray-400">Lunch</label>
+                    <textarea name="lunch" rows="2" class="w-full p-3 rounded bg-white/5 border border-white/10"
+                        placeholder="E.g., Dal, Rice, Veg Curry"></textarea>
+                </div>
+
+                <!-- Dinner -->
+                <div>
+                    <label class="text-sm mb-2 block text-gray-400">Dinner</label>
+                    <textarea name="dinner" rows="2" class="w-full p-3 rounded bg-white/5 border border-white/10"
+                        placeholder="E.g., Chapati, Paneer, Salad"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 py-3 rounded text-black font-bold">
+                    Save Menu
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

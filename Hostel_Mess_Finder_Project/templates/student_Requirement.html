@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Requirements | StudentNest</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Your original CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="antialiased bg-[#0d0d0f] text-white font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="text-center py-10">
+        <h2 class="text-3xl font-extrabold mb-2">Student Requirements</h2>
+        <p class="text-gray-400 text-sm">Choose what you want to explore</p>
+    </header>
+
+    <!-- Requirement Boxes -->
+    <section class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Rooms Box -->
+        <a href="{{ url_for('student_rooms_page') }}" 
+           class="glass p-10 rounded-[2.5rem] border border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-teal-400 transition shadow-xl">
+            <div class="text-5xl mb-4">🏠</div>
+            <h3 class="text-xl font-bold mb-2">Rooms</h3>
+            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Find hostels & partners</p>
+        </a>
+
+        <!-- Mess Box -->
+        <a href="{{ url_for('student_mess_page') }}" 
+           class="glass p-10 rounded-[2.5rem] border border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-400 transition shadow-xl">
+            <div class="text-5xl mb-4">🍱</div>
+            <h3 class="text-xl font-bold mb-2">Mess</h3>
+            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">View menus & subscriptions</p>
+        </a>
+
+    </section>
+
+    <!-- Logout -->
+    <div class="text-center mt-10">
+        <a href="{{ url_for('logout_page') }}" 
+           class="text-red-500 font-bold hover:underline">Logout</a>
+    </div>
+
+</body>
+</html>
