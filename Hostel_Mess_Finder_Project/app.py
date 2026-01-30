@@ -6,6 +6,7 @@ from models import House
 from models import Room
 from models import HouseImage
 from werkzeug.utils import secure_filename
+from sqlalchemy.orm import joinedload
 import os
 
 app = Flask(__name__)
@@ -75,19 +76,16 @@ def student_requirements_page():
 
 # Rooms & Mess
 # ---------------- STUDENT ROOMS SEARCH ----------------
-@app.route("/student/rooms")
+@app.route('/student/rooms')
 def student_rooms_page():
-    search_text = (request.args.get("city") or "").strip()
+    city = request.args.get('city')
 
-    if search_text:
-        words = search_text.split()
-        query = House.query
-        for word in words:
-            query = query.filter(House.city.ilike(f"%{word}%"))
-        houses = query.all()
-    else:
-        houses = House.query.all()
+    query = House.query.options(joinedload(House.images))
 
+    if city:
+        query = query.filter(House.city.ilike(f"%{city}%"))
+
+    houses = query.all()
     return render_template("requirement_Room.html", houses=houses)
 
 @app.route("/student/mess")
@@ -153,63 +151,48 @@ def owner_register():
 
 # ---------------- OWNER DASHBOARD ----------------
 from werkzeug.utils import secure_filename
-import os
+import os, uuid
 
 @app.route("/owner/dashboard", methods=["GET", "POST"])
 def owner_dashboard():
-    # Check if owner is logged in
     if not session.get("owner_id"):
         return redirect(url_for("owner_login"))
 
-    # Set upload folder
-    UPLOAD_FOLDER = "static/uploads"
+    UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
     if request.method == "POST":
-        house_name = request.form.get("house_name")
-        phone = request.form.get("phone")
-        rent = request.form.get("rent")
-        seats = request.form.get("seats")
-        features = request.form.get("features")
-        location = request.form.get("location")
-        city = request.form.get("city")
-        owner_id = session["owner_id"]
-
         new_house = House(
-            house_name=house_name,
-            phone=phone,
-            rent=rent,
-            seats=seats,
-            features=features,
-            location=location,
-            city=city,
-            owner_id=owner_id
+            house_name=request.form.get("house_name"),
+            phone=request.form.get("phone"),
+            rent=request.form.get("rent"),
+            seats=request.form.get("seats"),
+            features=request.form.get("features"),
+            location=request.form.get("location"),
+            city=request.form.get("city"),
+            owner_id=session["owner_id"]
         )
-        db.session.add(new_house)
-        db.session.commit()
 
-        # Save uploaded images
+        db.session.add(new_house)
+        db.session.commit()  # 🔥 get house ID
+
         files = request.files.getlist("images")
-        
-        print(request.files)
+
         for file in files:
-            if file.filename != "":
-                filename = secure_filename(file.filename)
-                print(filename)
-                filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-                print(filepath)
+            if file and file.filename:
+                filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
 
-                house_image = HouseImage(
-                    filename=filename,
-                    house_id=new_house.id
+                db.session.add(
+                    HouseImage(
+                        filename=filename,
+                        house_id=new_house.id
+                    )
                 )
-                db.session.add(house_image)
 
         db.session.commit()
 
-    # Load all houses by this owner for display
     houses = House.query.filter_by(owner_id=session["owner_id"]).all()
     return render_template("owner_dashboard.html", houses=houses)
 

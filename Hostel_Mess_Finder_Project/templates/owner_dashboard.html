@@ -77,7 +77,7 @@
                 {% for house in houses %}
                 <div class="glass rounded-3xl gradient-border relative group overflow-hidden">
                     <div class="h-48 relative overflow-hidden cursor-pointer" onclick="openEditModal('{{ house.id }}', '{{ house.house_name }}', '{{ house.rent }}', '{{ house.seats }}')">
-                        {% if house.images %}
+                        {% if house.images and house.images|length > 0 %}
                             <img src="{{ url_for('static', filename='uploads/' ~ house.images[0].filename) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                         {% else %}
                             <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400" class="w-full h-full object-cover">

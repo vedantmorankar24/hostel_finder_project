@@ -36,7 +36,12 @@ class Owner(db.Model):
     phone = db.Column(db.String(15))
     password_hash = db.Column(db.String(256), nullable=False)
 
-    houses = db.relationship("House", backref="owner", lazy=True)
+    houses = db.relationship(
+        "House",
+        backref="owner",
+        cascade="all, delete-orphan",
+        lazy=True
+    )
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -51,7 +56,13 @@ class House(db.Model):
     __tablename__ = "houses"
 
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey("owners.id"), nullable=False)
+
+    owner_id = db.Column(
+        db.Integer,
+        db.ForeignKey("owners.id"),
+        nullable=False
+    )
+
     house_name = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(15))
     rent = db.Column(db.Integer)
@@ -59,7 +70,6 @@ class House(db.Model):
     features = db.Column(db.String(200))
     location = db.Column(db.String(200))
     city = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime, default=db.func.now())
 
     images = db.relationship(
         "HouseImage",
@@ -67,9 +77,13 @@ class House(db.Model):
         cascade="all, delete-orphan",
         lazy=True
     )
-    
-    rooms = db.relationship("Room", backref="house", lazy=True)
-    images = db.relationship("HouseImage", backref="house", lazy=True)
+
+    rooms = db.relationship(
+        "Room",
+        backref="house",
+        cascade="all, delete-orphan",
+        lazy=True
+    )
 
 # =========================
 # HOUSE IMAGE MODEL
@@ -79,9 +93,12 @@ class HouseImage(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
-    house_id = db.Column(db.Integer, db.ForeignKey("houses.id"), nullable=False)
 
-House.images = db.relationship("HouseImage", backref="house", lazy=True)
+    house_id = db.Column(
+        db.Integer,
+        db.ForeignKey("houses.id"),   # ✅ FIXED
+        nullable=False
+    )
 
 # =========================
 # ROOM MODEL
@@ -94,7 +111,11 @@ class Room(db.Model):
     capacity = db.Column(db.Integer)
     available = db.Column(db.Boolean, default=True)
 
-    house_id = db.Column(db.Integer, db.ForeignKey("houses.id"), nullable=False)
+    house_id = db.Column(
+        db.Integer,
+        db.ForeignKey("houses.id"),
+        nullable=False
+    )
 
 # =========================
 # MESS MODEL (LOGIN ENTITY)
